@@ -104,47 +104,61 @@
             }
         });
 
+        // Initialize WebSocket connection
+        const socket = new WebSocket('wss://example.com/chat'); // Change the URL to your WebSocket server
+
+        socket.addEventListener('message', (event) => {
+            const data = JSON.parse(event.data);
+            if(data.room === currentRoom) {
+                loadChat(currentRoom);
+            }
+        });
+
         // Load chat history
-const loadChat = (roomNumber) => {
-    const chatWindow = document.getElementById("chatWindow");
-    chatWindow.innerHTML = "";
+        const loadChat = (roomNumber) => {
+            const chatWindow = document.getElementById("chatWindow");
+            chatWindow.innerHTML = "";
 
-    const userName = localStorage.getItem("userName");
-    const messages = JSON.parse(localStorage.getItem(`chatRoom${roomNumber}`)) || [];
-    messages.forEach(msg => {
-        const messageElement = document.createElement("div");
-        messageElement.className = `message m-1 p-2 break-words shadow-sm ${msg.name === userName ? 'bg-yellow-300' : 'bg-yellow-200'}`; // Set messages to a lighter yellow for others
-        messageElement.innerHTML = `${msg.name} (${msg.location}): ${msg.message}`;
-        chatWindow.appendChild(messageElement);
+            const userName = localStorage.getItem("userName");
+            const messages = JSON.parse(localStorage.getItem(`chatRoom${roomNumber}`)) || [];
+            messages.forEach(msg => {
+                const messageElement = document.createElement("div");
+                messageElement.className = `message m-1 p-2 break-words shadow-sm ${msg.name === userName ? 'bg-yellow-300' : 'bg-yellow-200'}`;
+                messageElement.innerHTML = `${msg.time} - ${msg.name} (${msg.location}): ${msg.message}`;
+                chatWindow.appendChild(messageElement);
             });
+        };
 
-        // Back button event
+        const updateMessages = () => setInterval(() => loadChat(currentRoom), 1000);
+
         document.getElementById("backBtn").addEventListener("click", () => {
             document.getElementById("chatContainer").classList.add("hidden");
             document.getElementById("chatSelection").classList.remove("hidden");
-            document.getElementById("chatWindow").innerHTML = ""; // Clear chat window
+            document.getElementById("chatWindow").innerHTML = "";
         });
 
-        // Send Message Event
-            document.getElementById("sendMessage").addEventListener("click", () => {
-                const messageInput = document.getElementById("messageInput");
-                const message = messageInput.value;
-                if (message) {
-                    const userName = localStorage.getItem("userName");
-                    const userLocation = localStorage.getItem("userLocation");
-                    const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); 
-
-                    const newMessage = { time, name: userName, location: userLocation, message };
-                    if (messages.length >= 50) {
-                        messages.shift(); // Remove the oldest message
-                    }
-                    messages.push(newMessage); 
-                    localStorage.setItem(`chatRoom${roomNumber}`, JSON.stringify(messages));
-                    messageInput.value = '';
-                    loadChat(roomNumber); // Refresh chat window
+        document.getElementById("sendMessage").addEventListener("click", () => {
+            const messageInput = document.getElementById("messageInput");
+            const message = messageInput.value;
+            if (message) {
+                const userName = localStorage.getItem("userName");
+                const userLocation = localStorage.getItem("userLocation");
+                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});                
+                const newMessage = { time, name: userName, location: userLocation, message, room: currentRoom };
+                
+                // Send the new message through WebSocket
+                socket.send(JSON.stringify(newMessage));
+                
+                const messages = JSON.parse(localStorage.getItem(`chatRoom${currentRoom}`)) || [];
+                if (messages.length >= 50) {
+                    messages.shift();
                 }
-            });
-        };
+                messages.push(newMessage);
+                localStorage.setItem(`chatRoom${currentRoom}`, JSON.stringify(messages));
+                messageInput.value = '';
+                loadChat(currentRoom);
+            }
+        });
     </script>
 </body>
 </html>
