@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
-    <title>Tot</title>
+    <title>Chat Online</title>
     <style>
         .chat-window {
             height: 300px;
@@ -12,10 +12,6 @@
             overflow-x: hidden;
             word-wrap: break-word; /* Keep this for chat window */
             scrollbar-width: none; /* Hide scrollbar for Firefox */
-        /* scrollbar-width: none; Hide scrollbar for Firefox */
-        /* .chat-window::-webkit-scrollbar {
-            display: none; Hide scrollbar for Chrome, Safari and Opera
-        } */
 
         .chat-window::-webkit-scrollbar {
             display: none; /* Hide scrollbar for Chrome, Safari and Opera */
@@ -106,7 +102,7 @@
         });
 
         // Initialize WebSocket connection
-        const socket = new WebSocket('wss://your-websocket-server-url'); // Ensure this URL is your actual WebSocket server
+        const socket = new WebSocket('wss://example-websocket-server-url'); // Ensure this URL is your actual WebSocket server
 
         socket.addEventListener('message', (event) => {
             const data = JSON.parse(event.data);
@@ -123,11 +119,22 @@
             const userName = localStorage.getItem("userName");
             const messages = []; // Assume an empty array initially; the server will update it
             // The server should send historical messages for this room as part of the WebSocket protocol if needed
-            messages.forEach(msg => {
-                const messageElement = document.createElement("div");
-                messageElement.className = `message m-1 p-2 break-words shadow-sm ${msg.name === userName ? 'bg-yellow-300' : 'bg-yellow-200'}`;
-                messageElement.innerHTML = `${msg.time} - ${msg.name} (${msg.location}): ${msg.message}`;
-                chatWindow.appendChild(messageElement);
+            // Assuming the server provides a 'history' event to get past messages
+            socket.addEventListener('history', (event) => {
+                const data = JSON.parse(event.data);
+                if (data.room === currentRoom) {
+                    const chatWindow = document.getElementById("chatWindow");
+                    const userName = localStorage.getItem("userName");
+
+                    data.messages.forEach(msg => {
+                        const messageElement = document.createElement("div");
+                        messageElement.className = `message m-1 p-2 break-words shadow-sm ${msg.name === userName ? 'bg-yellow-300' : 'bg-yellow-200'}`;
+                        messageElement.innerHTML = `${msg.time} - ${msg.name} (${msg.location}): ${msg.message}`;
+                        chatWindow.appendChild(messageElement);
+                    });
+
+                    chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to the bottom
+                }
             });
         };
 
