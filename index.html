@@ -106,7 +106,7 @@
         });
 
         // Initialize WebSocket connection
-        const socket = new WebSocket('wss://example.com/chat'); // Change the URL to your WebSocket server
+        const socket = new WebSocket('wss://your-websocket-server-url'); // Ensure this URL is your actual WebSocket server
 
         socket.addEventListener('message', (event) => {
             const data = JSON.parse(event.data);
@@ -121,7 +121,8 @@
             chatWindow.innerHTML = "";
 
             const userName = localStorage.getItem("userName");
-            const messages = JSON.parse(localStorage.getItem(`chatRoom${roomNumber}`)) || [];
+            const messages = []; // Assume an empty array initially; the server will update it
+            // The server should send historical messages for this room as part of the WebSocket protocol if needed
             messages.forEach(msg => {
                 const messageElement = document.createElement("div");
                 messageElement.className = `message m-1 p-2 break-words shadow-sm ${msg.name === userName ? 'bg-yellow-300' : 'bg-yellow-200'}`;
@@ -132,7 +133,7 @@
 
         const updateMessages = () => setTimeout(() => loadChat(currentRoom), 1000);
 
-        // WebSocket logic to add incoming messages to the UI
+        // WebSocket logic to add incoming messages to the UI & localStorage
         socket.addEventListener('message', (event) => {
             const data = JSON.parse(event.data);
             if (data.room === currentRoom) {
@@ -145,9 +146,7 @@
                 chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to the bottom
             }
 
-            const messages = JSON.parse(localStorage.getItem(`chatRoom${data.room}`)) || [];
-            messages.push(data);
-            localStorage.setItem(`chatRoom${data.room}`, JSON.stringify(messages));
+            // No local storage; assume server-side storage
         });
 
         document.getElementById("backBtn").addEventListener("click", () => {
@@ -168,12 +167,7 @@
                 // Send the new message through WebSocket
                 socket.send(JSON.stringify(newMessage));
                 
-                const messages = JSON.parse(localStorage.getItem(`chatRoom${currentRoom}`)) || [];
-                if (messages.length >= 50) {
-                    messages.shift();
-                }
-                messages.push(newMessage);
-                localStorage.setItem(`chatRoom${currentRoom}`, JSON.stringify(messages));
+                // No local storage; server handles message storage
                 messageInput.value = '';
                 loadChat(currentRoom);
                 updateMessages(); // Update messages after sending
