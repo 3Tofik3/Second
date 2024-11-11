@@ -104,41 +104,6 @@
         // Initialize WebSocket connection
         const socket = new WebSocket('wss://example-websocket-server-url'); // Ensure this URL is your actual WebSocket server
 
-        socket.addEventListener('message', (event) => {
-            const data = JSON.parse(event.data);
-                if (data.room === currentRoom) {
-                    loadChat(currentRoom);
-                }
-        });
-
-        // Load chat history
-        const loadChat = (roomNumber) => {
-            const chatWindow = document.getElementById("chatWindow");
-            chatWindow.innerHTML = "";
-
-            const userName = localStorage.getItem("userName");
-            const messages = []; // Assume an empty array initially; the server will update it
-            // The server should send historical messages for this room as part of the WebSocket protocol if needed
-            // Assuming the server provides a 'history' event to get past messages
-            socket.addEventListener('history', (event) => {
-                const data = JSON.parse(event.data);
-                if (data.room === currentRoom) {
-                    const chatWindow = document.getElementById("chatWindow");
-                    const userName = localStorage.getItem("userName");
-
-                    data.messages.forEach(msg => {
-                        const messageElement = document.createElement("div");
-                        messageElement.className = `message m-1 p-2 break-words shadow-sm ${msg.name === userName ? 'bg-yellow-300' : 'bg-yellow-200'}`;
-                        messageElement.innerHTML = `${msg.time} - ${msg.name} (${msg.location}): ${msg.message}`;
-                        chatWindow.appendChild(messageElement);
-                    });
-
-                    chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to the bottom
-                }
-            });
-        };
-
-        const updateMessages = () => setTimeout(() => loadChat(currentRoom), 1000);
 
         // WebSocket logic to add incoming messages to the UI & localStorage
         socket.addEventListener('message', (event) => {
