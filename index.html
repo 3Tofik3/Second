@@ -1,157 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+html
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
-    <title>Chat Online</title>
-    <style>
-        .chat-window {
-            height: 300px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            word-wrap: break-word; /* Keep this for chat window */
-            scrollbar-width: none; /* Hide scrollbar for Firefox */
-
-        .chat-window::-webkit-scrollbar {
-            display: none; /* Hide scrollbar for Chrome, Safari and Opera */
-        }
-
-        .chat-window {
-            scrollbar-width: none; /* Hide scrollbar for Firefox */
-        }
-        }
-        
-        .message {
-            word-wrap: break-word; /* Add this line */
-        }
-    </style>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 100px;
+      color: red;
+      text-align: center;
+      background-color: black;
+    }
+  </style>
 </head>
-<body class="bg-yellow-100 flex flex-col items-center p-4">
-    <div id="inputForm" class="mb-4">
-        <h1 class="text-xl font-bold">Welcome to the anonymous chat!</h1>
-        <input id="name" type="text" placeholder="Your Name" class="p-2 border rounded m-2" required />
-        <input id="location" type="text" placeholder="Your Location" class="p-2 border rounded m-2" required />
-        <button id="joinBtn" class="bg-purple-800 text-white p-2 rounded">Join Chat</button>
-        <p id="errorMsg" class="text-red-500 mt-2 hidden"></p>
-    </div>
-    
-    <div id="chatSelection" class="hidden mb-4">
-        <h2 class="text-lg font-semibold">Select a Chat Room:</h2>
-        <div id="chatRooms" class="flex flex-wrap justify-center">
-            <!-- Chat rooms will be generated here -->
-        </div>
-    </div>
-
-    <div id="chatContainer" class="hidden flex flex-col h-screen">
-        <button id="backBtn" class="bg-gray-400 text-white p-2 rounded mb-2">Back</button>
-        <div id="chatWindow" class="chat-window bg-yellow-100 flex-1 p-4 mb-2"></div>
-        <div class="p-2">
-            <input id="messageInput" type="text" placeholder="Type your message..." class="p-2 border rounded w-full" />
-            <button id="sendMessage" class="bg-purple-800 text-white p-2 rounded mt-2 w-full">Send</button>
-        </div>
-    </div>
-
-<script>
-        const chatRooms = 10;
-        const chatRoomElements = [];
-        let currentRoom;
-
-        // Save user information to localStorage
-        const saveUserInfo = () => {
-            const name = document.getElementById("name").value;
-            const location = document.getElementById("location").value;
-            localStorage.setItem("userName", name);
-            localStorage.setItem("userLocation", location);
-        };
-
-        document.getElementById("joinBtn").addEventListener("click", () => {
-            const name = document.getElementById("name").value;
-            const location = document.getElementById("location").value;
-
-            // Validate user information
-            if (!name || !location) {
-                const errorMsg = document.getElementById("errorMsg");
-                errorMsg.innerText = "Incorrect data has been entered";
-                errorMsg.classList.remove("hidden");
-
-                setTimeout(() => {
-                    errorMsg.classList.add("hidden");
-                }, 5000);
-                return;
-            }
-
-            saveUserInfo();
-            document.getElementById("inputForm").classList.add("hidden");
-            document.getElementById("chatSelection").classList.remove("hidden");
-
-                for (let i = 1; i <= chatRooms; i++) {
-                    const room = document.createElement("button");
-                    room.innerHTML = `Chat ${i}`;
-                    room.className = "bg-purple-800 m-2 p-2 rounded";
-                    room.addEventListener("click", () => {
-                        currentRoom = i; // Set current room here
-                        document.getElementById("chatSelection").classList.add("hidden");
-                        document.getElementById("chatContainer").classList.remove("hidden");
-                        loadChat(i);
-                    document.getElementById("messageInput").focus(); // Automatically focus the message input
-                });
-                chatRoomElements.push(room);
-                document.getElementById("chatRooms").appendChild(room);
-            }
-        });
-
-        // Initialize WebSocket connection
-    const socket = new WebSocket('wss://example-websocket-server-url'); // Ensure this URL is your actual WebSocket server
-
-    // WebSocket logic to add incoming messages to the UI
-    socket.addEventListener('message', (event) => {
-        const data = JSON.parse(event.data);
-        if (data.room === currentRoom) { // Compare the room
-            addMessageToChatWindow(data);
-        }
-    });
-
-    // Function to add message to the chat window
-    const addMessageToChatWindow = (data) => {
-        const chatWindow = document.getElementById("chatWindow");
-        const messageElement = document.createElement("div");
-        messageElement.className = `message m-1 p-2 break-words shadow-sm ${data.name === localStorage.getItem("userName") ? 'bg-yellow-300' : 'bg-yellow-200'}`;
-        messageElement.innerHTML = `${data.time} - ${data.name} (${data.location}): ${data.message}`;
-        chatWindow.appendChild(messageElement);
-        chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to the bottom
-    };
-
-        document.getElementById("backBtn").addEventListener("click", () => {
-            document.getElementById("chatContainer").classList.add("hidden");
-            document.getElementById("chatSelection").classList.remove("hidden");
-            document.getElementById("chatWindow").innerHTML = "";
-        });
-
-        document.getElementById("sendMessage").addEventListener("click", () => {
-            const messageInput = document.getElementById("messageInput");
-            const message = messageInput.value;
-            if (message) {
-                const userName = localStorage.getItem("userName");
-                const userLocation = localStorage.getItem("userLocation");
-                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});                
-                const newMessage = { time, name: userName, location: userLocation, message, room: currentRoom };
-                
-                // Send the new message through WebSocket
-                socket.send(JSON.stringify(newMessage));
-                
-                // Manually add the sent message to chat window
-                const chatWindow = document.getElementById("chatWindow");
-                const messageElement = document.createElement("div");
-                messageElement.className = `message m-1 p-2 break-words shadow-sm bg-yellow-300`;
-                messageElement.innerHTML = `${newMessage.time} - ${newMessage.name} (${newMessage.location}): ${newMessage.message}`;
-                chatWindow.appendChild(messageElement);
-                chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to the bottom
-                
-                // Clear input field
-                messageInput.value = '';
-            }
-        });
-    </script>
+<body>
+  <h1>Люблю тебя</h1>
 </body>
 </html>
