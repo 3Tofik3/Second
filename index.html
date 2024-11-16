@@ -5,8 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Приложение</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .random-position {
+            position: absolute;
+            animation: move 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes move {
+            0% { transform: translate(0, 0) rotate(0); }
+            100% { transform: translate(calc(var(--tw-translate-x, 0) * 0.7), calc(var(--tw-translate-y, 0) * 0.7)) rotate(var(--tw-rotate, 0)); }
+        }
+    </style>
 </head>
-<body class="flex items-center justify-center h-screen bg-black">
+<body class="flex items-center justify-center h-screen bg-black relative">
     <h1 class="text-white text-2xl">Я люблю тебя!</h1>
+    <div class="random-position text-red-500 text-sm font-serif" style="top: 10%; left: 20%; transform: rotate(-15deg);">Люблю тебя!</div>
+    <div class="random-position text-red-500 text-lg font-mono" style="top: 30%; right: 10%; transform: rotate(10deg);">Люблю тебя!</div>
+    <div class="random-position text-red-500 text-base font-sans" style="bottom: 20%; left: 15%; transform: rotate(-5deg);">Люблю тебя!</div>
+    <div class="random-position text-red-500 text-lg font-serif" style="bottom: 5%; right: 25%; transform: rotate(20deg);">Люблю тебя!</div>
+    <div class="random-position text-red-500 text-base font-mono" style="top: 50%; left: 50%; transform: rotate(-25deg);">Люблю тебя!</div>
 </body>
 </html>
