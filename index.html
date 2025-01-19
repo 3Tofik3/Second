@@ -1,24 +1,63 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Для принцесски</title>
+    <title>Секундомер</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        .random-position {
-            position: absolute;
-            animation: move 10s infinite alternate ease-in-out;
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-4 text-center">Секундомер</h1>
+        <div id="display" class="text-3xl text-center mb-4">00:00:00</div>
+        <div class="flex justify-center flex-col items-center space-y-4">
+            <button id="start" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Старт</button>
+            <button id="stop" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">Стоп</button>
+            <button id="reset" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">Сброс</button>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let elapsedTime = 0;
+
+        const display = document.getElementById('display');
+        const startBtn = document.getElementById('start');
+        const stopBtn = document.getElementById('stop');
+        const resetBtn = document.getElementById('reset');
+
+        function formatTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        @keyframes move {
-            0% { transform: translate(0, 0) rotate(0); }
-            100% { transform: translate(calc(var(--tw-translate-x, 0) * 0.7), calc(var(--tw-translate-y, 0) * 0.7)) rotate(var(--tw-rotate, 0)); }
+        function startTimer() {
+            const startTime = Date.now() - elapsedTime;
+            timerInterval = setInterval(() => {
+                elapsedTime = Date.now() - startTime;
+                display.textContent = formatTime(elapsedTime);
+            }, 1000);
+            startBtn.disabled = true;
         }
-    </style>
-</head>
-<body class="flex items-center justify-center h-screen bg-black relative">
-    <h1 class="text-white text-2xl">Я люблю тебя!</h1>
-  
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            startBtn.disabled = false;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            elapsedTime = 0;
+            display.textContent = '00:00:00';
+            startBtn.disabled = false;
+        }
+
+        startBtn.addEventListener('click', startTimer);
+        stopBtn.addEventListener('click', stopTimer);
+        resetBtn.addEventListener('click', resetTimer);
+    </script>
 </body>
 </html>
