@@ -1,63 +1,77 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Хозяйственные товары</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>СельхозТовары</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f2f2f2; }
+        header, footer { background-color: #3b823e; color: white; padding: 1em; text-align: center; }
+        nav ul { list-style-type: none; padding: 0; display: flex; justify-content: center; background-color: #2e6b31; }
+        nav li { margin: 0 15px; }
+        nav a { color: white; text-decoration: none; font-weight: bold; }
+        .container { padding: 20px; }
+        .catalog { display: flex; flex-wrap: wrap; gap: 20px; }
+        .item { background-color: white; padding: 15px; border: 1px solid #ccc; width: 200px; }
+        .item img { width: 100%; height: auto; }
+        .item button { background-color: #3b823e; color: white; border: none; padding: 10px; width: 100%; cursor: pointer; }
+        .item button:hover { background-color: #2e6b31; }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Магазин Хозяйственных Товаров</h1>
-        <nav>
-            <ul>
-                <li><a href="#home">Главная</a></li>
-                <li><a href="#products">Товары</a></li>
-                <li><a href="#contact">Контакты</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <section id="home">
-            <h2>Добро пожаловать в наш магазин!</h2>
-            <p>Здесь Вы найдете все необходимые хозяйственные товары.</p>
-        </section>
+<header>
+    <h1>СельхозТовары</h1>
+    <p>Все для вашего сельского хозяйства</p>
+</header>
 
-        <section id="products">
-            <h2>Наши Товары</h2>
-            <div class="tabs">
-                <button class="tablink" onclick="openTab(event, 'cleaning')">Чистящие средства</button>
-                <button class="tablink" onclick="openTab(event, 'tools')">Инструменты</button>
-                <button class="tablink" onclick="openTab(event, 'utensils')">Посуда</button>
-            </div>
+<nav>
+    <ul>
+        <li><a href="#home">Главная</a></li>
+        <li><a href="#catalog">Каталог</a></li>
+        <li><a href="#contact">Контакты</a></li>
+    </ul>
+</nav>
 
-            <div id="cleaning" class="tabcontent">
-                <h3>Чистящие средства</h3>
-                <p>Наши чистящие средства помогут Вам поддерживать порядок в доме.</p>
-            </div>
+<div class="container" id="home">
+    <p><strong>Добро пожаловать!</strong> У нас вы найдете все необходимые товары для сельского хозяйства — от семян до сельхозтехники.</p>
+</div>
 
-            <div id="tools" class="tabcontent" style="display:none">
-                <h3>Инструменты</h3>
-                <p>Широкий ассортимент инструментов для Вашего дома и сада.</p>
-            </div>
+<div class="container" id="catalog">
+    <h2>Каталог товаров</h2>
+    <div class="catalog">
+        <div class="item">
+            <img src="https://via.placeholder.com/200x150.png?text=Семена" alt="Семена">
+            <h3>Семена</h3>
+            <p>Качественные семена зерновых, овощей и фруктов.</p>
+            <button onclick="alert('Добавлено в корзину')">Добавить в корзину</button>
+        </div>
+        <div class="item">
+            <img src="https://via.placeholder.com/200x150.png?text=Удобрения" alt="Удобрения">
+            <h3>Удобрения</h3>
+            <p>Органические и минеральные удобрения для всех видов культур.</p>
+            <button onclick="alert('Добавлено в корзину')">Добавить в корзину</button>
+        </div>
+        <div class="item">
+            <img src="https://via.placeholder.com/200x150.png?text=Техника" alt="Техника">
+            <h3>Сельхозтехника</h3>
+            <p>Трактора, комбайны и другая техника.</p>
+            <button onclick="alert('Добавлено в корзину')">Добавить в корзину</button>
+        </div>
+    </div>
+</div>
 
-            <div id="utensils" class="tabcontent" style="display:none">
-                <h3>Посуда</h3>
-                <p>Мы предлагаем разнообразную посуду для Вашего удобства.</p>
-            </div>
-        </section>
+<div class="container" id="contact">
+    <h2>Контакты</h2>
+    <p><strong>Телефон:</strong> +7 (123) 456-78-90</p>
+    <p><strong>Email:</strong> info@selhoztovary.ru</p>
+</div>
 
-        <section id="contact">
-            <h2>Контакты</h2>
-            <p>Свяжитесь с нами по телефону: +7 (123) 456-7890</p>
-        </section>
-    </main>
+<footer>
+    <p>&copy; 2025 СельхозТовары. Все права защищены.</p>
+</footer>
 
-    <footer>
-        <p>&copy; 2023 Магазин Хозяйственных Товаров</p>
-    </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>
+```
