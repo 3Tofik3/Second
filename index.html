@@ -1,86 +1,63 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ГосТовары - Продажа древесины и крепежа</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f5f5f5;
-    }
-    header {
-      background-color: #2f4f4f;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    nav {
-      background-color: #444;
-      padding: 10px;
-      text-align: center;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 15px;
-    }
-    .container {
-      padding: 20px;
-    }
-    .product {
-      background-color: white;
-      margin-bottom: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    footer {
-      background-color: #2f4f4f;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      margin-top: 30px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хозяйственные товары</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>ГосТовары</h1>
-    <p>Продажа древесины, шурупов и строительных материалов</p>
-  </header>
+    <header>
+        <h1>Магазин Хозяйственных Товаров</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Главная</a></li>
+                <li><a href="#products">Товары</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <nav>
-    <a href="#">Главная</a>
-    <a href="#">Каталог</a>
-    <a href="#">Контакты</a>
-    <a href="#">О компании</a>
-  </nav>
+    <main>
+        <section id="home">
+            <h2>Добро пожаловать в наш магазин!</h2>
+            <p>Здесь Вы найдете все необходимые хозяйственные товары.</p>
+        </section>
 
-  <div class="container">
-    <div class="product">
-      <h2>Доска обрезная 50x150 мм</h2>
-      <p>Цена: 750 руб/м³</p>
-      <p>Высококачественная древесина хвойных пород.</p>
-    </div>
+        <section id="products">
+            <h2>Наши Товары</h2>
+            <div class="tabs">
+                <button class="tablink" onclick="openTab(event, 'cleaning')">Чистящие средства</button>
+                <button class="tablink" onclick="openTab(event, 'tools')">Инструменты</button>
+                <button class="tablink" onclick="openTab(event, 'utensils')">Посуда</button>
+            </div>
 
-    <div class="product">
-      <h2>Шурупы 5x50 мм (упаковка 100 шт)</h2>
-      <p>Цена: 120 руб</p>
-      <p>Усиленные крепежные элементы для строительных работ.</p>
-    </div>
+            <div id="cleaning" class="tabcontent">
+                <h3>Чистящие средства</h3>
+                <p>Наши чистящие средства помогут Вам поддерживать порядок в доме.</p>
+            </div>
 
-    <div class="product">
-      <h2>Фанера влагостойкая 10 мм</h2>
-      <p>Цена: 600 руб/лист</p>
-      <p>Подходит для наружных и внутренних работ.</p>
-    </div>
-  </div>
+            <div id="tools" class="tabcontent" style="display:none">
+                <h3>Инструменты</h3>
+                <p>Широкий ассортимент инструментов для Вашего дома и сада.</p>
+            </div>
 
-  <footer>
-    &copy; 2025 ГосТовары. Все права защищены.
-  </footer>
+            <div id="utensils" class="tabcontent" style="display:none">
+                <h3>Посуда</h3>
+                <p>Мы предлагаем разнообразную посуду для Вашего удобства.</p>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Контакты</h2>
+            <p>Свяжитесь с нами по телефону: +7 (123) 456-7890</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Магазин Хозяйственных Товаров</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
