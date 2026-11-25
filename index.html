@@ -16,38 +16,27 @@
 </head>
 <body>
 <div class="card">
-  <h1>💌 Привет, [Имя]!</h1>
+  <h1>💌 Привет, Киса!</h1>
   <p>Я хочу пригласить тебя на свидание. Помоги мне выбрать детали:</p>
 
-  <label for="date">📅 Когда тебе удобно?</label>
-  <input type="date" id="date" name="date">
+  <form action="https://formspree.io/f/xqpqngen" method="POST">
+    
+    <label for="date">📅 Когда тебе удобно? (с 20 декабря)</label>
+    <input type="date" id="date" name="date" min="2026-12-20" required>
 
-  <label for="place">📍 Куда пойдём?</label>
-  <select id="place" name="place">
-    <option>Кино</option>
-    <option>Кафе</option>
-    <option>Прогулка в парке</option>
-    <option>Сюрприз (доверься мне)</option>
-  </select>
+    <label for="place">📍 Куда пойдём?</label>
+    <select id="place" name="place">
+      <option>Кафе</option>
+      <option>Кино</option>
+      <option>Коялов Бор</option>
+      <option>Ужин дома с шампанским</option>
+    </select>
 
-  <label for="wish">✨ Твои пожелания</label>
-  <textarea id="wish" name="wish" rows="3" placeholder="Например: хочу сладкое..."></textarea>
+    <label for="wish">✨ Твои пожелания</label>
+    <textarea id="wish" name="wish" rows="3" placeholder="Например: хочу сладкое..."></textarea>
 
-  <button onclick="sendAnswer()">Отправить 💕</button>
+    <button type="submit">Отправить 💕</button>
+  </form>
 </div>
-
-<script>
-function sendAnswer() {
-  const date = document.getElementById('date').value;
-  const place = document.getElementById('place').value;
-  const wish = document.getElementById('wish').value;
-
-  if (!date) { alert('Пожалуйста, выбери дату 😊'); return; }
-
-  const text = `Привет! Я выбрала: дата — ${date}, место — ${place}, пожелания — ${wish || 'нет'}`;
-  // Открываем WhatsApp с готовым сообщением (можно заменить на Telegram)
-  window.open(`https://wa.me/ВАШ_НОМЕР?text=${encodeURIComponent(text)}`, '_blank');
-}
-</script>
 </body>
 </html>
